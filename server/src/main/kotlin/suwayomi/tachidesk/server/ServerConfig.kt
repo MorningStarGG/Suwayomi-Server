@@ -160,6 +160,11 @@ class ServerConfig(
     val chapterFolderFormat: MutableStateFlow<String> by OverrideConfigValue(StringConfigAdapter)
     val cbzFileFormat: MutableStateFlow<String> by OverrideConfigValue(StringConfigAdapter)
 
+    // AniList integration
+    val useAnilist: MutableStateFlow<Boolean> by OverrideConfigValue(BooleanConfigAdapter)
+    val contentType: MutableStateFlow<String> by OverrideConfigValue(StringConfigAdapter)
+    val anilistDefaultUncertainAction: MutableStateFlow<String> by OverrideConfigValue(StringConfigAdapter)
+
 
     @OptIn(ExperimentalCoroutinesApi::class)
     fun <T> subscribeTo(

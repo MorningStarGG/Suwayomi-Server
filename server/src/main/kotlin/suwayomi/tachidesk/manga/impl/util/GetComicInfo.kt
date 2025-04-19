@@ -8,10 +8,12 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import suwayomi.tachidesk.manga.impl.anilist.EnhancedComicInfoGenerator
 import suwayomi.tachidesk.manga.model.table.CategoryMangaTable
 import suwayomi.tachidesk.manga.model.table.CategoryTable
 import suwayomi.tachidesk.manga.model.table.ChapterTable
 import suwayomi.tachidesk.manga.model.table.MangaTable
+import suwayomi.tachidesk.server.serverConfig
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.nio.file.Path
@@ -72,6 +74,15 @@ fun createComicInfoFile(
     manga: ResultRow,
     chapter: ResultRow,
 ) {
+    // Check if AniList integration is enabled
+    if (serverConfig.useAnilist.value) {
+        // Use the enhanced ComicInfo generator with AniList integration
+        val enhancedGenerator = EnhancedComicInfoGenerator()
+        enhancedGenerator.createEnhancedComicInfoFile(dir, manga, chapter)
+        return
+    }
+    
+    // Original implementation for standard ComicInfo.xml generation
     val chapterUrl = chapter[ChapterTable.realUrl].orEmpty()
     val categories =
         transaction {

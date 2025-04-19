@@ -26,7 +26,8 @@ object MangaTable : IntIdTable() {
     val author = varchar("author", Integer.MAX_VALUE).nullable()
     val description = varchar("description", Integer.MAX_VALUE).nullable()
     val genre = varchar("genre", Integer.MAX_VALUE).nullable()
-
+    val originalLanguage = varchar("original_language", 256).nullable()
+    
     val status = integer("status").default(SManga.UNKNOWN)
     val thumbnail_url = varchar("thumbnail_url", 2048).nullable()
     val thumbnailUrlLastFetched = long("thumbnail_url_last_fetched").default(0)
