@@ -66,7 +66,7 @@ class EnhancedComicInfoGenerator {
             val enhancedData = metadataEnhancer.enhanceMangaMetadata(mangaRow, chapterRow, debug)
             
             // Generate the XML document
-            val xmlContent = createComicInfoXml(mangaRow, chapterRow, enhancedData, debug)
+            val xmlContent = createComicInfoXml(chapterRow, enhancedData, debug)
             
             // Remove the old file if it exists
             (dir / COMIC_INFO_FILE).deleteIfExists()
@@ -127,7 +127,6 @@ class EnhancedComicInfoGenerator {
      * Create ComicInfo.xml content with enhanced metadata
      */
     private fun createComicInfoXml(
-        mangaRow: ResultRow,
         chapterRow: ResultRow,
         enhancedData: Map<String, Any>,
         debug: Boolean
@@ -288,13 +287,6 @@ class EnhancedComicInfoGenerator {
         val pageCount = chapterRow[ChapterTable.pageCount]
         if (pageCount > 0) {
             addElement(document, root, "PageCount", pageCount.toString())
-        }
-        
-        // Add language
-        // Use originalLanguage field instead of language
-        val language = mangaRow[MangaTable.originalLanguage]
-        if (!language.isNullOrEmpty()) {
-            addElement(document, root, "LanguageISO", language)
         }
         
         // Add characters if available
