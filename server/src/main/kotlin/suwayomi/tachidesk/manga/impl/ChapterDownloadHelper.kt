@@ -1,19 +1,21 @@
 package suwayomi.tachidesk.manga.impl
 
+import java.io.File
+import java.io.InputStream
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.exposed.sql.transactions.transaction
 import suwayomi.tachidesk.manga.impl.download.fileProvider.ChaptersFilesProvider
 import suwayomi.tachidesk.manga.impl.download.fileProvider.impl.ArchiveProvider
 import suwayomi.tachidesk.manga.impl.download.fileProvider.impl.FolderProvider
 import suwayomi.tachidesk.manga.impl.download.model.DownloadChapter
+import suwayomi.tachidesk.manga.impl.util.FormatHelper
 import suwayomi.tachidesk.manga.impl.util.getChapterCbzPath
 import suwayomi.tachidesk.manga.impl.util.getChapterDownloadPath
 import suwayomi.tachidesk.manga.model.table.ChapterTable
 import suwayomi.tachidesk.manga.model.table.MangaTable
 import suwayomi.tachidesk.manga.model.table.toDataClass
 import suwayomi.tachidesk.server.serverConfig
-import java.io.File
-import java.io.InputStream
+
 
 object ChapterDownloadHelper {
     fun getImage(
@@ -53,7 +55,7 @@ object ChapterDownloadHelper {
     ): Pair<InputStream, Long> = provider(mangaId, chapterId).getAsArchiveStream()
 
     fun getCbzForDownload(chapterId: Int): Triple<InputStream, String, Long> {
-        val (chapterData, mangaTitle) =
+        val (chapterData, mangaTitle, chapterEntry) =
             transaction {
                 val row =
                     (ChapterTable innerJoin MangaTable)
@@ -62,13 +64,16 @@ object ChapterDownloadHelper {
                         .firstOrNull() ?: throw IllegalArgumentException("ChapterId $chapterId not found")
                 val chapter = ChapterTable.toDataClass(row)
                 val title = row[MangaTable.title]
-                Pair(chapter, title)
+                Triple(chapter, title, row)
             }
-
-        val fileName = "$mangaTitle - [${chapterData.scanlator}] ${chapterData.name}.cbz"
-
+    
+        // Use the format from config
+        val format = serverConfig.cbzFileFormat.value
+        val variables = FormatHelper.createCbzVariables(mangaTitle, chapterEntry)
+        val fileName = FormatHelper.formatString(format, variables) + ".cbz"
+    
         val cbzFile = provider(chapterData.mangaId, chapterData.id).getAsArchiveStream()
-
+    
         return Triple(cbzFile.first, fileName, cbzFile.second)
-    }
+    }    
 }

@@ -155,6 +155,12 @@ class ServerConfig(
     val flareSolverrSessionTtl: MutableStateFlow<Int> by OverrideConfigValue(IntConfigAdapter)
     val flareSolverrAsResponseFallback: MutableStateFlow<Boolean> by OverrideConfigValue(BooleanConfigAdapter)
 
+    // folder formats
+    val mangaFolderFormat: MutableStateFlow<String> by OverrideConfigValue(StringConfigAdapter)
+    val chapterFolderFormat: MutableStateFlow<String> by OverrideConfigValue(StringConfigAdapter)
+    val cbzFileFormat: MutableStateFlow<String> by OverrideConfigValue(StringConfigAdapter)
+
+
     @OptIn(ExperimentalCoroutinesApi::class)
     fun <T> subscribeTo(
         flow: Flow<T>,
