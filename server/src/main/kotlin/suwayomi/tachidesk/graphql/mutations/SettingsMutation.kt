@@ -69,6 +69,9 @@ class SettingsMutation {
         // downloader
         validateFilePath(settings.downloadsPath, "downloadsPath")
         validateValue(settings.autoDownloadNewChaptersLimit, "autoDownloadNewChaptersLimit") { it >= 0 }
+        validateValue(settings.mangaFolderFormat, "mangaFolderFormat") { it.isNotBlank() }
+        validateValue(settings.chapterFolderFormat, "chapterFolderFormat") { it.isNotBlank() }
+        validateValue(settings.cbzFileFormat, "cbzFileFormat") { it.isNotBlank() }
 
         // extensions
         validateValue(settings.extensionRepos, "extensionRepos") { it.all { repoUrl -> repoUrl.matches(repoMatchRegex) } }
