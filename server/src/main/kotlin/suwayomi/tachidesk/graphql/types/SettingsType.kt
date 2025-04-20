@@ -100,7 +100,6 @@
      
      // anilist integration
      val useAnilist: Boolean?
-     val contentType: String?
      val anilistDefaultUncertainAction: String?
  }
  
@@ -175,7 +174,6 @@
      override val flareSolverrAsResponseFallback: Boolean?,
      // anilist integration
      override val useAnilist: Boolean?,
-     override val contentType: String?,
      override val anilistDefaultUncertainAction: String?,
  ) : Settings
  
@@ -250,7 +248,6 @@
      override val flareSolverrAsResponseFallback: Boolean,
      // anilist integration
      override val useAnilist: Boolean,
-     override val contentType: String,
      override val anilistDefaultUncertainAction: String,
  ) : Settings {
      constructor(config: ServerConfig = serverConfig) : this(
@@ -319,7 +316,6 @@
          config.flareSolverrAsResponseFallback.value,
          // anilist integration
          config.useAnilist.value,
-         config.contentType.value,
          config.anilistDefaultUncertainAction.value,
      )
  }

@@ -314,15 +314,6 @@ class EnhancedComicInfoGenerator {
         // Add age rating if available
         addElement(document, root, "AgeRating", enhancedData["ageRating"] as String)
         
-        // Add manga type flags
-        val contentType = serverConfig.contentType.value
-        val mangaType = when {
-            contentType == "comic" -> "No" // Default for comics
-            enhancedData["isRightToLeft"] as Boolean -> "YesAndRightToLeft"
-            else -> "Yes"
-        }
-        
-        addElement(document, root, "Manga", mangaType)
         addElement(document, root, "BlackAndWhite", "Yes")
         
         // Use scanlator information if available

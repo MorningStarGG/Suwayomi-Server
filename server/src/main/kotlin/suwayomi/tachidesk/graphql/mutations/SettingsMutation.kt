@@ -188,7 +188,6 @@ class SettingsMutation {
 
         // anilist integration
         updateSetting(settings.useAnilist, serverConfig.useAnilist)
-        updateSetting(settings.contentType, serverConfig.contentType)
         updateSetting(settings.anilistDefaultUncertainAction, serverConfig.anilistDefaultUncertainAction)
 
     }

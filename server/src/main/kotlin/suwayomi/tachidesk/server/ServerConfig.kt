@@ -162,7 +162,6 @@ class ServerConfig(
 
     // AniList integration
     val useAnilist: MutableStateFlow<Boolean> by OverrideConfigValue(BooleanConfigAdapter)
-    val contentType: MutableStateFlow<String> by OverrideConfigValue(StringConfigAdapter)
     val anilistDefaultUncertainAction: MutableStateFlow<String> by OverrideConfigValue(StringConfigAdapter)
 
 

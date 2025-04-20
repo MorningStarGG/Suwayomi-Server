@@ -55,29 +55,18 @@ class MangaMetadataEnhancer(
             }
         }
 
-        // Don't proceed with AniList enhancement if not enabled or if Western comic
+        // Don't proceed with AniList enhancement if not enabled
         val useAnilist = serverConfig.useAnilist.value
-        val contentType = serverConfig.contentType.value
 
-        if (!useAnilist || contentType == "comic") {
-            if (contentType == "comic") {
-                logger.info { "Skipping AniList lookup for Western comic content" }
-                if (debug) {
-                    logger.debug { "Skipping AniList lookup (content_type=comic)" }
-                }
-            } else {
-                if (debug) {
-                    logger.debug { "Skipping AniList lookup (use_anilist=false)" }
-                }
+        if (!useAnilist) {
+            if (debug) {
+                logger.debug { "Skipping AniList lookup (use_anilist=false)" }
             }
             return enhancedData
         }
 
-        // Use AniList for manga, manhwa, manhua, and webtoons
-        logger.info { "Using AniList API for $contentType content" }
-        if (debug) {
-            logger.debug { "Using AniList API for $contentType content" }
-        }
+        // Use AniList for metadata enhancement
+        logger.info { "Using AniList API for metadata enhancement" }
 
         // Get AniList matching configuration
         val defaultUncertainAction = serverConfig.anilistDefaultUncertainAction.value
@@ -206,13 +195,16 @@ class MangaMetadataEnhancer(
                 // If no match found, this could be a wrong manga
                 // Replace the problematic user prompt code with this:
                 if (!matchFound) {
-                    val anilistTitle = anilistData.optJSONObject("title")?.optString("english") 
-                        ?: anilistData.optJSONObject("title")?.optString("romaji") ?: ""
-                    logger.warn { "Warning: AniList match might be incorrect. Title: $originalTitle vs AniList: $anilistTitle" }
+                    val anilistTitle =
+                            anilistData.optJSONObject("title")?.optString("english")
+                                    ?: anilistData.optJSONObject("title")?.optString("romaji") ?: ""
+                    logger.warn {
+                        "Warning: AniList match might be incorrect. Title: $originalTitle vs AniList: $anilistTitle"
+                    }
                     if (debug) {
                         logger.debug { "No title match found, uncertain match" }
                     }
-                    
+
                     // Use the default action from config
                     if (defaultUncertainAction.lowercase() == "skip") {
                         logger.warn { "Skipping uncertain AniList match based on configuration" }
