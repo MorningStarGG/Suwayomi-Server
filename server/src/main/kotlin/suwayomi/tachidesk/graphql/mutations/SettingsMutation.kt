@@ -177,6 +177,17 @@ class SettingsMutation {
         updateSetting(settings.flareSolverrSessionName, serverConfig.flareSolverrSessionName)
         updateSetting(settings.flareSolverrSessionTtl, serverConfig.flareSolverrSessionTtl)
         updateSetting(settings.flareSolverrAsResponseFallback, serverConfig.flareSolverrAsResponseFallback)
+
+        // formats
+        updateSetting(settings.mangaFolderFormat, serverConfig.mangaFolderFormat)
+        updateSetting(settings.chapterFolderFormat, serverConfig.chapterFolderFormat)
+        updateSetting(settings.cbzFileFormat, serverConfig.cbzFileFormat)
+
+        // anilist integration
+        updateSetting(settings.useAnilist, serverConfig.useAnilist)
+        updateSetting(settings.contentType, serverConfig.contentType)
+        updateSetting(settings.anilistDefaultUncertainAction, serverConfig.anilistDefaultUncertainAction)
+
     }
 
     fun setSettings(input: SetSettingsInput): SetSettingsPayload {
