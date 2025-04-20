@@ -1,9 +1,7 @@
 import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
 import java.net.URI
-import java.net.http.HttpClient
-import java.net.http.HttpRequest
-import java.net.http.HttpResponse
-import org.json.JSONArray
 
 /*
  * Copyright (C) Contributors to the Suwayomi project
@@ -20,22 +18,23 @@ val getTachideskVersion = { "v1.1.${getCommitCount()}" }
 // Function to get the latest WebUI release tag from GitHub
 val getLatestWebUITag = {
     runCatching {
-        val apiUrl = "https://api.github.com/repos/MorningStarGG/Suwayomi-WebUI-preview/releases"
-        val client = HttpClient.newBuilder().build()
-        val request = HttpRequest.newBuilder()
-            .uri(URI.create(apiUrl))
-            .header("Accept", "application/json")
-            .GET()
-            .build()
+        val apiUrl = URI.create("https://api.github.com/repos/MorningStarGG/Suwayomi-WebUI-preview/releases/latest").toURL()
+        val connection = apiUrl.openConnection() as HttpURLConnection
+        connection.requestMethod = "GET"
+        connection.setRequestProperty("Accept", "application/vnd.github.v3+json")
         
-        val response = client.send(request, HttpResponse.BodyHandlers.ofString())
-        val jsonArray = JSONArray(response.body())
-        
-        if (jsonArray.length() > 0) {
-            val latestRelease = jsonArray.getJSONObject(0)
-            latestRelease.getString("tag_name")
+        val responseCode = connection.responseCode
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            val reader = BufferedReader(InputStreamReader(connection.inputStream))
+            val response = reader.readText()
+            reader.close()
+            
+            // Simple string parsing to extract the tag_name
+            val tagPattern = "\"tag_name\":\\s*\"([^\"]+)\"".toRegex()
+            val matchResult = tagPattern.find(response)
+            matchResult?.groupValues?.get(1) ?: "r2488" // Fallback if pattern not found
         } else {
-            "r2488" // Fallback to a known version if API call fails
+            "r2488" // Fallback if API call fails
         }
     }.getOrDefault("r2488") // Fallback to a known version if anything goes wrong
 }
