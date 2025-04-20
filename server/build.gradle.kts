@@ -94,6 +94,9 @@ dependencies {
     implementation(libs.cron4j)
 
     implementation(libs.cronUtils)
+
+    //json
+    implementation("org.json:json")
 }
 
 application {
