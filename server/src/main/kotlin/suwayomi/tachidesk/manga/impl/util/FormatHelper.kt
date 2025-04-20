@@ -27,38 +27,30 @@ object FormatHelper {
         val sourceDir = SafePath.buildValidFilename(source.toString())
         
         return mapOf(
-            "title" to mangaEntry[MangaTable.title],
+            "manga_title" to mangaEntry[MangaTable.title],
             "source" to sourceDir,
         )
     }
 
     /**
-     * Creates a variables map for chapter formatting
+     * Creates a variables map for chapter and CBZ formatting
+     * If mangaEntry is provided, manga-related variables will be included
      */
-    fun createChapterVariables(chapterEntry: ResultRow): Map<String, String> {
+    fun createChapterVariables(chapterEntry: ResultRow, mangaEntry: ResultRow? = null): Map<String, String> {
         val chapterNumber = chapterEntry[ChapterTable.chapter_number]
         val volumeNumber = extractVolumeNumber(chapterEntry[ChapterTable.name])
         
         return mapOf(
-            "title" to chapterEntry[ChapterTable.name],
+            "manga_title" to (mangaEntry?.get(MangaTable.title) ?: ""),
             "number" to chapterNumber.toString(),
             "number_padded" to formatChapterNumber(chapterNumber, 2),
             "number_padded3" to formatChapterNumber(chapterNumber, 3),
-            "chapter" to chapterEntry[ChapterTable.name],
             "volume" to volumeNumber,
             "volume_prefix" to if (volumeNumber.isNotEmpty()) "Vol.$volumeNumber " else "",
-            "name" to chapterEntry[ChapterTable.name],
+            "chapter_name" to chapterEntry[ChapterTable.name],
             "title_suffix" to extractTitleSuffix(chapterEntry[ChapterTable.name], chapterNumber),
             "scanlator" to (if (chapterEntry[ChapterTable.scanlator] != null) "${chapterEntry[ChapterTable.scanlator]}_" else "")
         )
-    }
-
-    /**
-     * Creates a variables map for CBZ file formatting
-     */
-    fun createCbzVariables(mangaTitle: String, chapterEntry: ResultRow): Map<String, String> {
-        val chapterVariables = createChapterVariables(chapterEntry)
-        return chapterVariables + mapOf("manga_title" to mangaTitle)
     }
 
     /**

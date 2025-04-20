@@ -65,8 +65,8 @@ class ApplicationDirs(
     val tempThumbnailCacheRoot = "$tempRoot/thumbnails"
     val tempMangaCacheRoot = "$tempRoot/manga-cache"
 
-    val thumbnailDownloadsRoot get() = "$downloadsRoot/thumbnails"
-    val mangaDownloadsRoot get() = "$downloadsRoot/mangas"
+    val thumbnailDownloadsRoot get() = "$dataRoot/thumbnails"
+    val mangaDownloadsRoot get() = "$downloadsRoot"
 }
 
 data class ProxySettings(

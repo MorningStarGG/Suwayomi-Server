@@ -55,7 +55,7 @@ object ChapterDownloadHelper {
     ): Pair<InputStream, Long> = provider(mangaId, chapterId).getAsArchiveStream()
 
     fun getCbzForDownload(chapterId: Int): Triple<InputStream, String, Long> {
-        val (chapterData, mangaTitle, chapterEntry) =
+        val (chapterData, mangaEntry, chapterEntry) =
             transaction {
                 val row =
                     (ChapterTable innerJoin MangaTable)
@@ -63,13 +63,12 @@ object ChapterDownloadHelper {
                         .where { ChapterTable.id eq chapterId }
                         .firstOrNull() ?: throw IllegalArgumentException("ChapterId $chapterId not found")
                 val chapter = ChapterTable.toDataClass(row)
-                val title = row[MangaTable.title]
-                Triple(chapter, title, row)
+                Triple(chapter, row, row)
             }
     
         // Use the format from config
         val format = serverConfig.cbzFileFormat.value
-        val variables = FormatHelper.createCbzVariables(mangaTitle, chapterEntry)
+        val variables = FormatHelper.createChapterVariables(chapterEntry, mangaEntry)
         val fileName = FormatHelper.formatString(format, variables) + ".cbz"
     
         val cbzFile = provider(chapterData.mangaId, chapterData.id).getAsArchiveStream()
