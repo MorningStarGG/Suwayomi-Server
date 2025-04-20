@@ -193,7 +193,6 @@ class MangaMetadataEnhancer(
                 }
 
                 // If no match found, this could be a wrong manga
-                // Replace the problematic user prompt code with this:
                 if (!matchFound) {
                     val anilistTitle =
                             anilistData.optJSONObject("title")?.optString("english")
