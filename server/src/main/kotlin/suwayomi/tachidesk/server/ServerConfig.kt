@@ -164,7 +164,6 @@ class ServerConfig(
     val useAnilist: MutableStateFlow<Boolean> by OverrideConfigValue(BooleanConfigAdapter)
     val anilistDefaultUncertainAction: MutableStateFlow<String> by OverrideConfigValue(StringConfigAdapter)
 
-
     @OptIn(ExperimentalCoroutinesApi::class)
     fun <T> subscribeTo(
         flow: Flow<T>,
