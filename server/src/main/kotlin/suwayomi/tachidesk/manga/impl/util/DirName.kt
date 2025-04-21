@@ -35,10 +35,11 @@ private fun getChapterDir(
     chapterId: Int,
 ): String {
     val chapterEntry = transaction { ChapterTable.selectAll().where { ChapterTable.id eq chapterId }.first() }
+    val mangaEntry = getMangaEntry(mangaId)
     
     // Use the format from config
     val format = serverConfig.chapterFolderFormat.value
-    val variables = FormatHelper.createChapterVariables(chapterEntry)
+    val variables = FormatHelper.createChapterVariables(chapterEntry, mangaEntry)
     val chapterDir = FormatHelper.formatString(format, variables)
 
     return getMangaDir(mangaId) + "/$chapterDir"
