@@ -36,12 +36,12 @@ object FormatHelper {
      * Creates a variables map for chapter and CBZ formatting
      * If mangaEntry is provided, manga-related variables will be included
      */
-    fun createChapterVariables(chapterEntry: ResultRow, mangaEntry: ResultRow? = null): Map<String, String> {
+    fun createChapterVariables(chapterEntry: ResultRow, mangaEntry: ResultRow): Map<String, String> {
         val chapterNumber = chapterEntry[ChapterTable.chapter_number]
         val volumeNumber = extractVolumeNumber(chapterEntry[ChapterTable.name])
         
         return mapOf(
-            "manga_title" to (mangaEntry?.get(MangaTable.title) ?: ""),
+            "manga_title" to mangaEntry[MangaTable.title],
             "number" to chapterNumber.toString(),
             "number_padded" to formatChapterNumber(chapterNumber, 2),
             "number_padded3" to formatChapterNumber(chapterNumber, 3),
