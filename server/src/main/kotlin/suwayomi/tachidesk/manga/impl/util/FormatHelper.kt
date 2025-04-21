@@ -20,6 +20,33 @@ object FormatHelper {
     }
 
     /**
+     * Formats a string by replacing variables with their values
+     * while preserving directory structure
+     */
+    fun formatDirPath(format: String, variables: Map<String, String>): String {
+        // First sanitize all variable values to ensure they don't contain path separators
+        val sanitizedVariables = variables.mapValues { (_, value) ->
+            // Replace slashes in the values with a safe character like underscore
+            value.replace("/", "_")
+        }
+        
+        // Split by path separator
+        val parts = format.split("/")
+        
+        // Format each part individually
+        val formattedParts = parts.map { part ->
+            var result = part
+            sanitizedVariables.forEach { (key, value) ->
+                result = result.replace("{$key}", value)
+            }
+            SafePath.buildValidFilename(result)
+        }
+        
+        // Join back with path separators
+        return formattedParts.joinToString("/")
+    }
+
+    /**
     * Creates a variables map for manga formatting
     */
     fun createMangaVariables(mangaEntry: ResultRow): Map<String, String> {

@@ -25,7 +25,7 @@ private fun getMangaDir(mangaId: Int): String {
     // Use the format from config
     val format = serverConfig.mangaFolderFormat.value
     val variables = FormatHelper.createMangaVariables(mangaEntry)
-    return FormatHelper.formatString(format, variables)
+    return FormatHelper.formatDirPath(format, variables)
 }
 
 private fun getChapterDir(
@@ -40,7 +40,7 @@ private fun getChapterDir(
     // Use the format from config
     val format = serverConfig.chapterFolderFormat.value
     val variables = FormatHelper.createChapterVariables(chapterEntry, mangaEntry)
-    val chapterDir = FormatHelper.formatString(format, variables)
+    val chapterDir = FormatHelper.formatDirPath(format, variables)
 
     return getMangaDir(mangaId) + "/$chapterDir"
 }
@@ -82,8 +82,8 @@ fun updateMangaDownloadDir(
 
     // Format paths using the configured format
     val format = serverConfig.mangaFolderFormat.value
-    val oldMangaDir = FormatHelper.formatString(format, oldVariables)
-    val newMangaDir = FormatHelper.formatString(format, newVariables)
+    val oldMangaDir = FormatHelper.formatDirPath(format, oldVariables)
+    val newMangaDir = FormatHelper.formatDirPath(format, newVariables)
 
     val oldDir = "${applicationDirs.downloadsRoot}/$oldMangaDir"
     val newDir = "${applicationDirs.downloadsRoot}/$newMangaDir"
