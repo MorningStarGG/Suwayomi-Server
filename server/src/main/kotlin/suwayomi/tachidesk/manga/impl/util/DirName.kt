@@ -45,7 +45,6 @@ private fun getChapterDir(
     return getMangaDir(mangaId) + "/$chapterDir"
 }
 
-
 fun getThumbnailDownloadPath(mangaId: Int): String = applicationDirs.thumbnailDownloadsRoot + "/$mangaId"
 
 fun getMangaDownloadDir(mangaId: Int): String = applicationDirs.mangaDownloadsRoot + "/" + getMangaDir(mangaId)
@@ -96,6 +95,5 @@ fun updateMangaDownloadDir(
         true
     }
 }
-
 
 private fun getMangaEntry(mangaId: Int): ResultRow = transaction { MangaTable.selectAll().where { MangaTable.id eq mangaId }.first() }
